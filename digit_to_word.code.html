@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<script>
+    function myFunction() {
+        var x = document.getElementById("myNumber").value;
+        let y = toWord(x);
+        document.getElementById("demo").innerHTML = y;
+    }
+
+    function toWord(x) {
+        x = JSON.stringify(parseInt(x)); // to eliminate traling zeros in the beginning
+        var arr = [];
+        let no_of_digits = 0;
+        let rem = 0;
+        let length = x.length;
+        var number_to_words = {
+            '0' : 'Zero',
+            '1': 'One',
+            '2': 'Two',
+            '3': 'Three',
+            '4': 'Four',
+            '5': 'Five',
+            '6': 'Six',
+            '7': 'Seven',
+            '8': 'Eight',
+            '9': 'Nine'
+        };
+        var multiple_of_tens = {
+            '1': 'Ten',
+            '2': 'Twen',
+            '3': 'Thir',
+            '4': 'For',
+            '5': 'Fif',
+            '6': 'Six',
+            '7': 'Seven',
+            '8': 'Eigh',
+            '9': 'Nin'
+        }
+        var tens = ['Thousand', 'Hundred', 'ty', 'teen'];
+        for (var i = 0; i < length; i++) {
+            arr.push(x[i]);
+        }
+        let in_words = '';
+        switch (length) {
+            case 1: // for single digit
+                in_words = number_to_words[JSON.parse(arr[0])];
+                break;
+            case 2:  // for 2 digit
+
+                if (arr[0] == '1') { // handling 10-19
+                    if (arr[1] == '0') // handling 10
+                    {
+                        in_words = multiple_of_tens[JSON.parse(arr[0])];
+                    }
+                    else { // handling 11-19
+                        if (arr[1] == '1') {
+                            in_words = 'Eleven';
+                        }
+                        else if (arr[1] == '2') {
+                            in_words = 'Twelve';
+                        }
+                        else {
+                            in_words = multiple_of_tens[JSON.parse(arr[1])] + tens[3];
+                        }
+                    }
+                }
+                else { // handling 20 - 99
+                    in_words = multiple_of_tens[JSON.parse(arr[0])] + tens[2];
+                    if (arr[1] != '0') { // for not multiples of 10
+                        in_words = in_words + ' ' + number_to_words[JSON.parse(arr[1])];
+                    }
+                }
+                break;
+            case 3:
+                in_words = number_to_words[JSON.parse(arr[0])] + ' ' + tens[1]; // for hundred
+                // for hunderd 1 to 9
+                if (arr[1] == '0') {
+                    if(arr[2]!='0'){
+                        in_words = in_words + ' ' + number_to_words[JSON.parse(arr[2])];
+                    }
+                    
+                }
+                else { // for hunderd 10 - 99
+                    if (arr[1] == '1') { // handling 10-19
+                        if (arr[2] == '0') // handling 10
+                        {
+                            in_words = in_words + ' ' +  multiple_of_tens[JSON.parse(arr[1])];
+                        }
+                        else { // handling 11-19
+                            if (arr[2] == '1') {
+                                in_words = in_words + ' ' + 'Eleven';
+                            }
+                            else if (arr[2] == '2') {
+                                in_words = in_words + ' ' + 'Twelve';
+                            }
+                            else {
+                                in_words = in_words + ' ' +  multiple_of_tens[JSON.parse(arr[2])] + tens[3];
+                            }
+                        }
+                    }
+                    else { // handling 20 - 99
+                        in_words = in_words + ' ' + multiple_of_tens[JSON.parse(arr[1])] + tens[2];
+                        if (arr[2] != '0') { // for not multiples of 10
+                            in_words = in_words + ' ' + number_to_words[JSON.parse(arr[2])];
+                        }
+                    }
+                }
+
+                break;
+            default:
+                console.log('error');
+                in_words = 'Value Out of index';
+        }
+        return in_words;
+    }
+
+</script>
+
+<body>
+    <div style="margin : auto; position: relative;  width: 50%; text-align: center; border: 0.2px solid black; margin-top: auto;">
+            <h3>Enter a number between 0 and 1000</h3>
+
+            <input type="number" id="myNumber" value="674" style="text-align: center;">
+        
+            <p>Click the button to get value in words.</p>
+        
+            <button onclick="myFunction()">To Words</button>
+        
+            <p id="demo">Six Hundred Seventy Four</p>
+            <p style="text-align: right; padding-right: 5px;"> <cite>@ Codez </cite></p>
+
+    </div>
+    
+</body>
+
+</html>
